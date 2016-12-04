@@ -52,8 +52,14 @@ public class MotionProfile {
 	public void configureNewProfile(double distance){
 		initialSegment = new Segment(0, 0, 0);
 		this.goal = distance;
-		this.cruiseVel = getCruiseVel(this.goal);
 		this.maxAcc = 0.0005;
+		if(distance < 0){
+			this.maxAcc *= -1;
+		}
+		this.cruiseVel = getCruiseVel(this.goal);
+		if(distance < 0){
+			this.cruiseVel *= -1;
+		}
 		this.currentSegment = initialSegment;
 		setState(MotionState.ACCELERATING);
 		lastTime = 0.1;
@@ -113,8 +119,13 @@ public class MotionProfile {
 		
 		double t_to_zero = Math.abs(cruiseVel / maxAcc); //time to get to zero speed from cruise speed
 		double x_to_zero = currentVel * t_to_zero - .5 * maxAcc * t_to_zero * t_to_zero; //distance to get to zero speed
-		
-		double cruiseX  = Math.max(0, distanceToGo - x_to_cruise - x_to_zero);
+		double cruiseX;
+		if(goal > 0){
+			cruiseX  = Math.max(0, distanceToGo - x_to_cruise - x_to_zero);
+		}
+		else{
+			cruiseX  = Math.min(0, distanceToGo - x_to_cruise - x_to_zero);
+		}
 		double cruiseT = Math.abs(cruiseX / cruiseVel);
 		
 		if (getState() == MotionState.ACCELERATING){
@@ -165,7 +176,7 @@ public class MotionProfile {
 	}
 	
 	public boolean isFinishedTrajectory() {
-        return Math.abs(currentSegment.pos - goal) < 0.01
-                && Math.abs(currentSegment.vel) < 0.001;
+        return Math.abs(currentSegment.pos - goal) < 0.05
+                && Math.abs(currentSegment.vel) < 0.01;
     }
 }

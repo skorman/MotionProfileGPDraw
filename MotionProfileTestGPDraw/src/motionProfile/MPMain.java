@@ -1,6 +1,6 @@
 package motionProfile;
 
-public class Main {
+public class MPMain {
 
 	static DrawMP draw;
 	
@@ -8,7 +8,7 @@ public class Main {
 		// TODO Auto-generated method stub
 		draw = new DrawMP();
 		
-		draw.mp.setScaleFactor(0.25);
+		draw.mp.setScaleFactor(0.3);
 		
 		draw.run();
 		
