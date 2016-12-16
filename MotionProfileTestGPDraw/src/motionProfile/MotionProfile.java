@@ -5,7 +5,6 @@ public class MotionProfile {
 	private double Kp, Ki, Kd, Ka, Kv, goal, cruiseVel,
 	maxAcc = 0.0005, cruiseVelScaleFactor = 0.75;
 	private double lastTime;
-	private Segment initialSegment = new Segment(0, 0, 0);
 	private Segment currentSegment = new Segment(0, 0, 0);
 	private Segment nextSegment = new Segment(0, 0, 0);
 	
@@ -50,7 +49,6 @@ public class MotionProfile {
 	}
 	
 	public void configureNewProfile(double distance){
-		initialSegment = new Segment(0, 0, 0);
 		this.goal = distance;
 		this.maxAcc = 0.0005;
 		if(distance < 0){
@@ -60,7 +58,7 @@ public class MotionProfile {
 		if(distance < 0){
 			this.cruiseVel *= -1;
 		}
-		this.currentSegment = initialSegment;
+		this.currentSegment = new Segment(0, 0, 0);
 		setState(MotionState.ACCELERATING);
 		lastTime = 0.1;
 	}
@@ -75,7 +73,7 @@ public class MotionProfile {
 		this.goal = distance;
 		this.cruiseVel = getCruiseVel(this.goal);
 		this.maxAcc = 0.000005;
-		this.currentSegment = initialSegment;
+		this.currentSegment = new Segment(0, 0, 0);
 		this.cruiseVelScaleFactor = 0.05;
 		setState(MotionState.ACCELERATING);
 		lastTime = 0.1;
